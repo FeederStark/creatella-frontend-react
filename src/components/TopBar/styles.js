@@ -15,12 +15,12 @@ export const Tab = styled.button`
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: #ddd;
   font-weight: bold;
   font-size: 20px;
   border: 0;
+  background: ${props => (props.highlighted ? '#bbb' : '#ddd')};
   &:hover {
-    background: #ccc;
+    background: ${props => (props.highlighted ? '#bbb' : '#ccc')};
   }
   &:active {
     background: #bbb;

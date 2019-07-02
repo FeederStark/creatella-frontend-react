@@ -1,30 +1,51 @@
 import { call, put, select } from 'redux-saga/effects';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import api from '../../services/api';
 import { Creators as EmojisCreators } from '../ducks/emojis';
-import hostPath from '../../config/hostPath';
 
-export function* getEmojis(action) {
+export function* getEmojis() {
   try {
-    const { page } = action.payload;
+    const end = yield select(state => state.emojis.end);
+    if (end) {
+      return;
+    }
+    const page = yield select(state => state.emojis.page);
     const { data } = yield call(api.get, `/api/products?_page=${page}&_limit=20`);
-    yield put(EmojisCreators.getEmojisSuccess(data));
+    if (page > 1) {
+      yield put(EmojisCreators.getAdvertisement());
+    }
+    if (data.length < 20) {
+      toast.success('End of catalogue', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      yield put(EmojisCreators.getEmojisSuccess(page, data, true));
+      return;
+    }
+    yield put(EmojisCreators.getEmojisSuccess(page + 1, data, end));
   } catch (err) {
-    console.log('error');
+    toast.error('Error fetching emojis', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   }
 }
 
-export function* getAdvertisement(action) {
+function findIsDuplicated(ads, randomAd) {
+  return ads.find(ad => ad === randomAd);
+}
+
+export function* getAdvertisement() {
   try {
     let isDuplicated = true;
     let randomAd;
+    const ads = yield select(state => state.emojis.ads);
     while (isDuplicated) {
       randomAd = Math.floor(Math.random() * 1000);
-      isDuplicated = yield select(state => state.emojis.ads.find(ad => ad === randomAd));
+      isDuplicated = findIsDuplicated(ads, randomAd);
     }
-
-    // const imgPath = `${hostPath}/ads/?r=${Math.floor(Math.random() * 1000)}`;
+    yield put(EmojisCreators.getAdvertisementSuccess(randomAd));
   } catch (err) {
-    console.log(err);
+    toast.error('Error fetching advertisement', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   }
 }

@@ -26,7 +26,6 @@ export const Row = styled.div`
 `;
 
 export const Element = styled.div`
-  font-size: 35px;
   width: 75%;
   display: flex;
   align-items: center;
@@ -40,4 +39,8 @@ export const Info = styled.div`
   padding: 10px;
   align-items: flex-start;
   justify-content: flex-start;
+`;
+
+export const Face = styled.p`
+  font-size: ${props => `${props.size}px`};
 `;

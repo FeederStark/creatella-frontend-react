@@ -7,17 +7,29 @@ import { Container } from './styles';
 import hostPath from '../../config/hostPath';
 
 class Advertisement extends Component {
-  componentDidMount() {}
+  static propTypes = {
+    emojis: PropTypes.shape({
+      ads: PropTypes.arrayOf(PropTypes.number),
+    }).isRequired,
+    getAdvertisement: PropTypes.func.isRequired,
+  };
+
+  componentDidMount() {
+    this.getImg();
+  }
 
   getImg = () => {
-    const imgPath = `${hostPath}/ads/?r=${Math.floor(Math.random() * 1000)}`;
-    return imgPath;
+    const { getAdvertisement } = this.props;
+    getAdvertisement();
   };
 
   render() {
+    const { emojis } = this.props;
+    const ad = emojis.ads[emojis.ads.length - 1];
+    const imgPath = `${hostPath}/ads/?r=${ad}`;
     return (
       <Container>
-        <img className="ad" alt="Advertisement" src={this.getImg()} />
+        <img className="ad" alt="Advertisement" src={imgPath} />
       </Container>
     );
   }

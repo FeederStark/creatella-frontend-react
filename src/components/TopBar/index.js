@@ -1,16 +1,41 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Creators as EmojisActions } from '../../store/ducks/emojis';
 import { Container, Tab } from './styles';
 
-export default class TopBar extends Component {
-  componentDidMount() {}
+const TopBar = ({
+  sortEmojisBySize, sortEmojisByPrice, sortEmojisById, emojis,
+}) => (
+  <Container>
+    <Tab onClick={sortEmojisBySize} highlighted={emojis.active === 'size'}>
+      Size
+    </Tab>
+    <Tab onClick={sortEmojisByPrice} highlighted={emojis.active === 'price'}>
+      Price
+    </Tab>
+    <Tab onClick={sortEmojisById} highlighted={emojis.active === 'id'}>
+      Id
+    </Tab>
+  </Container>
+);
 
-  render() {
-    return (
-      <Container>
-        <Tab>Size</Tab>
-        <Tab>Price</Tab>
-        <Tab>Id</Tab>
-      </Container>
-    );
-  }
-}
+TopBar.propTypes = {
+  sortEmojisBySize: PropTypes.func.isRequired,
+  sortEmojisByPrice: PropTypes.func.isRequired,
+  sortEmojisById: PropTypes.func.isRequired,
+  emojis: PropTypes.shape({
+    active: PropTypes.string,
+  }).isRequired,
+};
+
+const mapStateToProps = state => ({
+  emojis: state.emojis,
+});
+const mapDispatchToProps = dispatch => bindActionCreators(EmojisActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TopBar);
