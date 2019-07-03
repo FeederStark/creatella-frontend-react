@@ -36,10 +36,9 @@ This is a list of the tools used to make this application.
 - styled-components. This is used to style most of the application components.
 - prop-types. Way of making runtime assertions about what type of data a React component requires in order to render properly.
 - axios. We use axios to make the api calls.
-- react-modal. Way of creating the modals.
 - redux and react-redux. To use a global store and make the flux of data flow better.
 - redux-saga. To make asynchronous calls.
 - eslint. Eslint is used to make the code have a solid pattern.
 - editorconfig. Editorconfig also helps with having a solid pattern between the devs.
-- react-toastify. This is used to prompt successfull/error messages to the user after inserting/removing data.
-- react-highlight-words. Used to highlight the cards tags.
+- react-toastify. This is used to prompt successfull/error messages to the user. Here, you will see a toast if you scroll down the div until there are no more products to be loaded.
+- font-awesome. This was used to show the loading icon.
