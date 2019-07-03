@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Creators as EmojisActions } from '../../store/ducks/emojis';
-import { Container, Tab } from './styles';
+import { Container, Tab, Icon } from './styles';
 
 const TopBar = ({
   sortEmojisBySize, sortEmojisByPrice, sortEmojisById, emojis,
 }) => (
-  <Container>
-    <Tab onClick={sortEmojisBySize} highlighted={emojis.active === 'size'}>
-      Size
-    </Tab>
-    <Tab onClick={sortEmojisByPrice} highlighted={emojis.active === 'price'}>
-      Price
-    </Tab>
-    <Tab onClick={sortEmojisById} highlighted={emojis.active === 'id'}>
-      Id
-    </Tab>
-  </Container>
+  <Fragment>
+    {emojis.userLoading && <Icon className="fa fa-spinner fa-pulse" />}
+    <Container>
+      <Tab onClick={sortEmojisBySize} highlighted={emojis.active === 'size'}>
+        Size
+      </Tab>
+      <Tab onClick={sortEmojisByPrice} highlighted={emojis.active === 'price'}>
+        Price
+      </Tab>
+      <Tab onClick={sortEmojisById} highlighted={emojis.active === 'id'}>
+        Id
+      </Tab>
+    </Container>
+  </Fragment>
 );
 
 TopBar.propTypes = {
@@ -27,6 +30,7 @@ TopBar.propTypes = {
   sortEmojisById: PropTypes.func.isRequired,
   emojis: PropTypes.shape({
     active: PropTypes.string,
+    userLoading: PropTypes.bool,
   }).isRequired,
 };
 

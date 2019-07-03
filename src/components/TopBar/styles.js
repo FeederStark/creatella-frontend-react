@@ -9,6 +9,11 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
+export const Icon = styled.i`
+  font-size: 30px;
+  margin-top: 30px;
+`;
+
 export const Tab = styled.button`
   display: flex;
   align-items: center;

@@ -20,8 +20,12 @@ class Grid extends Component {
           date: PropTypes.date,
         }),
       ),
+      loading: PropTypes.bool,
     }).isRequired,
     getEmojis: PropTypes.func.isRequired,
+    fillData: PropTypes.func.isRequired,
+    setUserLoadingTrue: PropTypes.func.isRequired,
+    setUserLoadingFalse: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -29,11 +33,49 @@ class Grid extends Component {
     getEmojis();
   }
 
+  // Tried to resolve this with promise but I
+  // couldn't make the promise keep calling itself so I just used setInterval
+
+  // scrollPromise = () => new Promise((resolve, reject) => {
+  //   const { emojis } = this.props;
+  //   if (emojis.loading) {
+  //     reject();
+  //   } else {
+  //     resolve();
+  //   }
+  // });
+
+  // applyScroll = () => {
+  //   const { fillData, getEmojis } = this.props;
+  //   const scroller = document.getElementById('scrollDiv');
+  //   if (scroller.offsetHeight + scroller.scrollTop === scroller.scrollHeight) {
+  //     this.scrollPromise()
+  //       .then(() => {
+  //         fillData();
+  //         getEmojis();
+  //       })
+  //       .catch((error) => {
+  //         console.log('err');
+  //       });
+  //   }
+  // };
+
   applyScroll = () => {
-    const { getEmojis } = this.props;
+    const {
+      fillData, getEmojis, emojis, setUserLoadingTrue, setUserLoadingFalse,
+    } = this.props;
     const scroller = document.getElementById('scrollDiv');
     if (scroller.offsetHeight + scroller.scrollTop === scroller.scrollHeight) {
-      getEmojis();
+      if (emojis.loading) {
+        setUserLoadingTrue();
+        window.setTimeout(() => {
+          this.applyScroll();
+        }, 500);
+      } else {
+        fillData();
+        setUserLoadingFalse();
+        getEmojis();
+      }
     }
   };
 
